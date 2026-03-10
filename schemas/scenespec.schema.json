@@ -1,0 +1,246 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/hsad/spkg/schemas/scenespec.schema.json",
+  "title": "SceneSpec",
+  "description": "SPKG Scene Specification — the contract between LLM scene planner and USD resolver. Defines what objects to place, where, and with what physics properties.",
+  "type": "object",
+  "required": ["schema_version", "generator", "stage", "assets", "objects"],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+\\.\\d+$",
+      "description": "Semantic version of this schema (e.g. '1.0.0')."
+    },
+    "generator": {
+      "type": "object",
+      "description": "Metadata about what generated this SceneSpec.",
+      "required": ["name", "version"],
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Generator identifier (e.g. 'spkg-llm', 'manual')."
+        },
+        "version": {
+          "type": "string",
+          "description": "Generator version."
+        }
+      }
+    },
+    "determinism": {
+      "type": "object",
+      "description": "Settings for reproducible scene assembly.",
+      "additionalProperties": false,
+      "properties": {
+        "scene_seed": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Master seed for all random operations."
+        },
+        "prng": {
+          "type": "string",
+          "enum": ["pcg64", "mt19937"],
+          "default": "pcg64",
+          "description": "Pseudorandom number generator algorithm."
+        },
+        "canonical_object_sort": {
+          "type": "string",
+          "enum": ["object_id_lex", "insertion_order"],
+          "default": "object_id_lex",
+          "description": "Deterministic ordering strategy for objects in the stage."
+        }
+      }
+    },
+    "stage": {
+      "type": "object",
+      "description": "USD Stage-level settings.",
+      "required": ["default_prim", "metersPerUnit", "upAxis"],
+      "additionalProperties": false,
+      "properties": {
+        "default_prim": {
+          "type": "string",
+          "pattern": "^/",
+          "description": "Default prim path (e.g. '/World')."
+        },
+        "metersPerUnit": {
+          "type": "number",
+          "exclusiveMinimum": 0,
+          "description": "Scale factor: 0.01 = centimeters, 1.0 = meters."
+        },
+        "upAxis": {
+          "type": "string",
+          "enum": ["Y", "Z"],
+          "description": "Stage up-axis."
+        },
+        "timeCodesPerSecond": {
+          "type": "number",
+          "exclusiveMinimum": 0,
+          "default": 60,
+          "description": "Simulation time codes per second."
+        }
+      }
+    },
+    "assets": {
+      "type": "array",
+      "description": "Registry of USD assets available for placement.",
+      "items": {
+        "$ref": "#/$defs/Asset"
+      },
+      "minItems": 1
+    },
+    "objects": {
+      "type": "array",
+      "description": "Scene objects — each references an asset and has transform + physics.",
+      "items": {
+        "$ref": "#/$defs/SceneObject"
+      }
+    }
+  },
+  "$defs": {
+    "Asset": {
+      "type": "object",
+      "description": "A reusable USD asset definition.",
+      "required": ["asset_id", "asset_ref"],
+      "additionalProperties": false,
+      "properties": {
+        "asset_id": {
+          "type": "string",
+          "pattern": "^[a-z0-9_/]+$",
+          "description": "Unique asset identifier (e.g. 'kitchen_min/cabinet_a')."
+        },
+        "asset_ref": {
+          "type": "string",
+          "description": "Relative path to the USD asset file."
+        },
+        "asset_version": {
+          "type": "string",
+          "description": "Version tag (e.g. 'git:3f2c1ab' or 'v1.0')."
+        }
+      }
+    },
+    "Transform": {
+      "type": "object",
+      "description": "3D transform in meters.",
+      "required": ["translate_m"],
+      "additionalProperties": false,
+      "properties": {
+        "translate_m": {
+          "type": "array",
+          "items": { "type": "number" },
+          "minItems": 3,
+          "maxItems": 3,
+          "description": "Translation in meters [x, y, z]."
+        },
+        "rotate_quat_wxyz": {
+          "type": "array",
+          "items": { "type": "number" },
+          "minItems": 4,
+          "maxItems": 4,
+          "default": [1.0, 0.0, 0.0, 0.0],
+          "description": "Rotation quaternion [w, x, y, z]. Default: identity."
+        },
+        "scale": {
+          "type": "array",
+          "items": { "type": "number", "exclusiveMinimum": 0 },
+          "minItems": 3,
+          "maxItems": 3,
+          "default": [1.0, 1.0, 1.0],
+          "description": "Scale factors [x, y, z]."
+        }
+      }
+    },
+    "PhysicsMetadata": {
+      "type": "object",
+      "description": "Physics properties for simulation.",
+      "required": ["rigid_body", "collision"],
+      "additionalProperties": false,
+      "properties": {
+        "rigid_body": {
+          "type": "string",
+          "enum": ["static", "dynamic", "kinematic"],
+          "description": "RigidBody type: static (immovable), dynamic (simulated), kinematic (scripted)."
+        },
+        "collision": {
+          "type": "string",
+          "enum": ["convexHull", "convexDecomposition", "meshSimplification", "boundingCube", "boundingSphere", "none"],
+          "description": "Collision approximation strategy."
+        },
+        "mass_kg": {
+          "type": "number",
+          "exclusiveMinimum": 0,
+          "description": "Mass in kilograms. Required for dynamic bodies."
+        },
+        "density_kg_m3": {
+          "type": "number",
+          "exclusiveMinimum": 0,
+          "description": "Material density. Alternative to mass_kg — mass is computed from volume."
+        },
+        "static_friction": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1,
+          "description": "Static friction coefficient."
+        },
+        "dynamic_friction": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1,
+          "description": "Dynamic friction coefficient."
+        },
+        "restitution": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1,
+          "description": "Bounciness (0 = no bounce, 1 = perfect bounce)."
+        }
+      }
+    },
+    "Semantics": {
+      "type": "object",
+      "description": "Semantic metadata for synthetic data labeling.",
+      "additionalProperties": false,
+      "properties": {
+        "taxonomies": {
+          "type": "object",
+          "description": "Key-value pairs of taxonomy → labels.",
+          "additionalProperties": {
+            "type": "array",
+            "items": { "type": "string" }
+          }
+        }
+      }
+    },
+    "SceneObject": {
+      "type": "object",
+      "description": "An object instance placed in the scene.",
+      "required": ["object_id", "asset_id", "prim_path", "transform"],
+      "additionalProperties": false,
+      "properties": {
+        "object_id": {
+          "type": "string",
+          "pattern": "^obj_[a-z0-9_]+$",
+          "description": "Unique object instance ID (e.g. 'obj_cabinet_0001')."
+        },
+        "asset_id": {
+          "type": "string",
+          "description": "References an asset_id from the assets array."
+        },
+        "prim_path": {
+          "type": "string",
+          "pattern": "^/",
+          "description": "USD prim path (e.g. '/World/Props/Cabinet_0001')."
+        },
+        "transform": {
+          "$ref": "#/$defs/Transform"
+        },
+        "physics_metadata": {
+          "$ref": "#/$defs/PhysicsMetadata"
+        },
+        "semantics": {
+          "$ref": "#/$defs/Semantics"
+        }
+      }
+    }
+  }
+}

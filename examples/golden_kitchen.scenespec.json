@@ -1,0 +1,244 @@
+{
+    "schema_version": "1.0.0",
+    "generator": {
+        "name": "manual",
+        "version": "0.1.0"
+    },
+    "determinism": {
+        "scene_seed": 42,
+        "prng": "pcg64",
+        "canonical_object_sort": "object_id_lex"
+    },
+    "stage": {
+        "default_prim": "/World",
+        "metersPerUnit": 0.01,
+        "upAxis": "Y",
+        "timeCodesPerSecond": 60
+    },
+    "assets": [
+        {
+            "asset_id": "kitchen_min/cabinet_a",
+            "asset_ref": "./assets/kitchen_min/cabinet_a/cabinet_a.usd",
+            "asset_version": "v1.0"
+        },
+        {
+            "asset_id": "kitchen_min/table_square",
+            "asset_ref": "./assets/kitchen_min/table_square/table_square.usd",
+            "asset_version": "v1.0"
+        },
+        {
+            "asset_id": "kitchen_min/cup",
+            "asset_ref": "./assets/kitchen_min/cup/cup.usd",
+            "asset_version": "v1.0"
+        }
+    ],
+    "objects": [
+        {
+            "object_id": "obj_cabinet_0001",
+            "asset_id": "kitchen_min/cabinet_a",
+            "prim_path": "/World/Props/Cabinet_0001",
+            "transform": {
+                "translate_m": [
+                    0.0,
+                    0.0,
+                    -1.5
+                ],
+                "rotate_quat_wxyz": [
+                    1.0,
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "scale": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "physics_metadata": {
+                "rigid_body": "static",
+                "collision": "convexDecomposition",
+                "mass_kg": 35.0,
+                "static_friction": 0.6,
+                "dynamic_friction": 0.5,
+                "restitution": 0.05
+            },
+            "semantics": {
+                "taxonomies": {
+                    "category": [
+                        "furniture",
+                        "cabinet"
+                    ],
+                    "material": [
+                        "wood"
+                    ]
+                }
+            }
+        },
+        {
+            "object_id": "obj_cabinet_0002",
+            "asset_id": "kitchen_min/cabinet_a",
+            "prim_path": "/World/Props/Cabinet_0002",
+            "transform": {
+                "translate_m": [
+                    1.2,
+                    0.0,
+                    -1.5
+                ],
+                "rotate_quat_wxyz": [
+                    1.0,
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "scale": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "physics_metadata": {
+                "rigid_body": "static",
+                "collision": "convexDecomposition",
+                "mass_kg": 35.0,
+                "static_friction": 0.6,
+                "dynamic_friction": 0.5,
+                "restitution": 0.05
+            },
+            "semantics": {
+                "taxonomies": {
+                    "category": [
+                        "furniture",
+                        "cabinet"
+                    ],
+                    "material": [
+                        "wood"
+                    ]
+                }
+            }
+        },
+        {
+            "object_id": "obj_table_0001",
+            "asset_id": "kitchen_min/table_square",
+            "prim_path": "/World/Props/Table_0001",
+            "transform": {
+                "translate_m": [
+                    1.0,
+                    0.0,
+                    1.0
+                ],
+                "rotate_quat_wxyz": [
+                    1.0,
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "scale": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "physics_metadata": {
+                "rigid_body": "static",
+                "collision": "convexHull",
+                "mass_kg": 20.0,
+                "static_friction": 0.5,
+                "dynamic_friction": 0.4,
+                "restitution": 0.1
+            },
+            "semantics": {
+                "taxonomies": {
+                    "category": [
+                        "furniture",
+                        "table"
+                    ]
+                }
+            }
+        },
+        {
+            "object_id": "obj_cup_0001",
+            "asset_id": "kitchen_min/cup",
+            "prim_path": "/World/Props/Cup_0001",
+            "transform": {
+                "translate_m": [
+                    0.8,
+                    0.75,
+                    1.0
+                ],
+                "rotate_quat_wxyz": [
+                    1.0,
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "scale": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "physics_metadata": {
+                "rigid_body": "dynamic",
+                "collision": "convexHull",
+                "mass_kg": 0.3,
+                "static_friction": 0.4,
+                "dynamic_friction": 0.3,
+                "restitution": 0.15
+            },
+            "semantics": {
+                "taxonomies": {
+                    "category": [
+                        "kitchenware",
+                        "cup"
+                    ],
+                    "material": [
+                        "ceramic"
+                    ]
+                }
+            }
+        },
+        {
+            "object_id": "obj_cup_0002",
+            "asset_id": "kitchen_min/cup",
+            "prim_path": "/World/Props/Cup_0002",
+            "transform": {
+                "translate_m": [
+                    1.2,
+                    0.75,
+                    0.9
+                ],
+                "rotate_quat_wxyz": [
+                    0.9659,
+                    0.0,
+                    0.2588,
+                    0.0
+                ],
+                "scale": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "physics_metadata": {
+                "rigid_body": "dynamic",
+                "collision": "convexHull",
+                "mass_kg": 0.3,
+                "static_friction": 0.4,
+                "dynamic_friction": 0.3,
+                "restitution": 0.15
+            },
+            "semantics": {
+                "taxonomies": {
+                    "category": [
+                        "kitchenware",
+                        "cup"
+                    ],
+                    "material": [
+                        "ceramic"
+                    ]
+                }
+            }
+        }
+    ]
+}

@@ -1,0 +1,36 @@
+# SPKG — Simulation-Pipeline Kitchen Gym
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+dist/
+build/
+*.egg
+.eggs/
+
+# Virtual environments
+.venv/
+venv/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Project outputs
+outputs/
+*.usda
+*.usd
+!assets/**/*.usd
+!assets/**/*.usda
+
+# Reports
+report.html
+report.json
